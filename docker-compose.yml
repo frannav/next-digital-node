@@ -1,0 +1,21 @@
+services:
+  api:
+    container_name: node-js-api
+    build:
+      context: .
+      # We target the 'prerelease' stage which has the dev dependencies and source code.
+      target: prerelease
+    environment:
+      - NODE_ENV=development
+    ports:
+      - "3000:3000"
+    volumes:
+      # Mount source code for hot-reloading
+      - ./src:/usr/src/app/src
+      # Persist the database file across container restarts
+      - ./db.json:/usr/src/app/db.json
+      # Mount environment file
+      - ./.development.env:/usr/src/app/.development.env
+    # Override the default entrypoint to run the development server with hot-reloading.
+    command: bun run dev
+
