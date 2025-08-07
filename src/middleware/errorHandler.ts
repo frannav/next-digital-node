@@ -1,14 +1,20 @@
 import type { NextFunction, Request, Response } from "express";
 
-// TODO: Implement a more robust error handler
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
+interface HttpError extends Error {
+	statusCode?: number;
+}
+
 export const errorHandler = (
-	err: Error,
+	err: HttpError,
 	_req: Request,
 	res: Response,
 	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	_next: NextFunction,
 ) => {
 	console.error(err); // For debugging purposes
-	res.status(500).json({ message: "Something went wrong" });
+
+	const statusCode = err.statusCode || 500;
+	const message = err.message || "Something went wrong";
+
+	res.status(statusCode).json({ message });
 };
