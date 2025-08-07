@@ -1,14 +1,4 @@
-# ATM API
-
-This is a RESTful API for an ATM system, built with Node.js, Express, and TypeScript, using `bun` as the runtime. It follows a modular monolithic architecture.
-
-## Features
-
--   **User Management**: Create and manage users.
--   **Account Management**: Create and manage bank accounts for users.
--   **Card Management**: Issue, activate, and manage debit/credit cards.
--   **Transactions**: Perform withdrawals, deposits, and transfers.
--   **Movement History**: Track all transactions for an account.
+# ATM API Backend
 
 ## Prerequisites
 
@@ -64,29 +54,29 @@ To build and run the server in production mode:
 All endpoints are prefixed with `/api`.
 
 ### Users & Accounts
-- `POST /users`: Create a new user.
+- `POST /api/users`: Create a new user.
   - **Body**: `{ "name": "John Doe", "email": "john.doe@example.com", "password": "yourpassword" }`
-- `POST /accounts`: Create a new bank account.
+- `POST /api/accounts`: Create a new bank account.
   - **Body**: `{ "userId": "user-id", "currency": "USD", "initialBalance": 1000 }`
-- `GET /users/:userId/accounts`: Get all accounts for a user.
-- `GET /accounts/:accountId`: Get details for a specific account.
+- `GET /api/accounts/user/:userId`: Get all accounts for a user.
+- `GET /api/accounts/:accountId`: Get details for a specific account.
 
 ### Cards
-- `POST /cards`: Create a new card for an account.
+- `POST /api/cards`: Create a new card for an account.
   - **Body**: `{ "accountId": "account-id", "type": "debit", "pin": "1234" }`
-- `POST /cards/activate`: Activate a card.
+- `GET /api/cards/:cardId`: Get details for a specific card.
+- `POST /api/cards/activate`: Activate a card.
   - **Body**: `{ "cardId": "card-id", "pin": "1234" }`
-- `PATCH /cards/:cardId/pin`: Change a card's PIN.
+- `PATCH /api/cards/:cardId/pin`: Change a card's PIN.
   - **Body**: `{ "oldPin": "1234", "newPin": "5678" }`
-- `GET /cards/:cardId`: Get details for a specific card.
 
 ### Operations
-- `GET /accounts/:accountId/movements`: Get all movements for an account.
-- `POST /deposits`: Make a deposit to an account.
+- `GET /accounts/:accountId/movements`: Get all movements for an account. **(Note: This route is currently disabled in `src/routes.ts`)**
+- `POST /api/deposits`: Make a deposit to an account.
   - **Body**: `{ "cardId": "card-id", "amount": 200 }`
-- `POST /withdrawals`: Make a withdrawal from an account.
+- `POST /api/withdrawals`: Make a withdrawal from an account.
   - **Body**: `{ "cardId": "card-id", "amount": 100 }`
-- `POST /transfers`: Transfer funds between accounts.
+- `POST /api/transfers`: Transfer funds between accounts.
   - **Body**: `{ "fromAccountId": "account-id-1", "toIban": "ES...", "amount": 50 }`
 
 ## Project Structure
@@ -102,12 +92,103 @@ The project follows a modular, layered architecture:
     -   `app.ts`: Express application setup.
     -   `index.ts`: Application entry point.
 
-## TO-DO
+## Tests Statement
 
--   Implement full business logic for all services.
--   Add robust password hashing with `bcrypt` (dependency already included).
--   Implement proper IBAN validation using the `iban` package (dependency already included).
--   Add unit and integration tests.
--   Set up Swagger for API documentation.
--   Implement a logger (e.g., Pino) (dependencies already included).
--   Create a seeder for initial data.
+A client in the financial sector has asked us to develop the API that will be used by their own ATMs as well as those of other banks. Fortunately, we don’t need to build any UI, so this is a pure back-end task.
+
+---
+
+## 📋 Specifications
+
+### 1. View Account Activity
+
+* **Endpoint:** `GET /accounts/{accountId}/transactions`
+* **Functionality:**
+
+  * Customers can view transactions on any of their accounts by specifying the `accountId`.
+  * Transactions include:
+
+    * Cash **deposits** and **withdrawals**
+    * **Fees** charged
+    * **Incoming** and **outgoing** **transfers**
+  * Each transaction record must include a `type` field indicating its category (e.g., `withdrawal`, `deposit`, `transfer`, `fee`).
+
+### 2. Withdraw Cash
+
+* **Endpoint:** `POST /accounts/{accountId}/withdraw`
+* **Functionality:**
+
+  * Only withdraw from the account linked to the inserted card.
+  * **Debit cards:** Restricted by available balance.
+  * **Credit cards:** Can withdraw up to the credit limit (but not beyond).
+  * **All cards:** Cannot exceed the per-card withdrawal limit.
+  * **Interbank ATMs:** Apply external-bank fees when applicable.
+
+### 3. Deposit Cash
+
+* **Endpoint:** `POST /accounts/{accountId}/deposit`
+* **Functionality:**
+
+  * Only deposit into the account linked to the inserted card.
+  * **Allowed only at our bank’s ATMs.** Deposits at other banks’ ATMs must be rejected.
+
+### 4. Make Transfers
+
+* **Endpoint:** `POST /transfers`
+* **Functionality:**
+
+  * Transfer funds to accounts at:
+
+    * Our bank
+    * Other banks
+  * **Validations:**
+
+    1. Ensure the destination IBAN is well-formed.
+    2. Apply interbank transfer fees where applicable.
+
+### 5. Activate Card
+
+* **Endpoint:** `POST /cards/{cardId}/activate`
+* **Functionality:**
+
+  * First-time card usage requires activation before any other operations.
+
+### 6. Change PIN
+
+* **Endpoint:** `PUT /cards/{cardId}/pin`
+* **Functionality:**
+
+  * Customers can change their PIN at any time.
+  * **Mandatory** PIN change immediately after initial activation.
+
+---
+
+## 🔧 Technical Considerations
+
+* **Version Control**
+
+  * Use **Git** with **Git Flow** methodology.
+  * Make **frequent, meaningful commits**; the bank’s team will review the code regularly.
+
+* **Testing**
+
+  * Implement both **unit tests** and **integration tests**.
+
+* **Security**
+
+  * Treat the **PIN** as sensitive data; **never store it in plain text**.
+
+* **CI/CD**
+
+  * Preferably set up **GitLab CI**, **GitHub Actions**, or **Jenkins** to:
+
+    * Run tests
+    * Build the application
+    * Deploy automatically
+
+* **Containerization**
+
+  * Provide a **Dockerfile** and use **Docker** for containerized deployments.
+
+
+
