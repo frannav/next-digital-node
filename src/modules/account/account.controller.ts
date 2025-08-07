@@ -1,45 +1,50 @@
-import type { Request, Response } from "express";
+import type { NextFunction, Request, Response } from "express";
 import {
 	createAccount,
 	getAccountById,
 	getAccountsByUserId,
-} from "./account.services.ts";
+} from "./account.services";
 
-export const createAccountController = async (req: Request, res: Response) => {
+export const createAccountController = async (
+	req: Request,
+	res: Response,
+	next: NextFunction,
+) => {
 	try {
 		const account = await createAccount(req.body);
 		res.status(201).json(account);
 	} catch (error) {
-		res.status(500).json({
-			message: "Error creating account",
-			error: error instanceof Error ? error.message : "Unknown error",
-		});
+		next(error);
 	}
 };
 
 export const getAccountsByUserController = async (
 	req: Request,
 	res: Response,
+	next: NextFunction,
 ) => {
 	try {
 		const { userId } = req.params;
 		if (!userId) {
+			// In a real app, you'd probably want a more robust validation/error handling
 			return res.status(400).json({ message: "User ID is required" });
 		}
 		const accounts = await getAccountsByUserId(userId);
 		res.status(200).json(accounts);
 	} catch (error) {
-		res.status(500).json({
-			message: "Error fetching accounts",
-			error: error instanceof Error ? error.message : "Unknown error",
-		});
+		next(error);
 	}
 };
 
-export const getAccountByIdController = async (req: Request, res: Response) => {
+export const getAccountByIdController = async (
+	req: Request,
+	res: Response,
+	next: NextFunction,
+) => {
 	try {
 		const { accountId } = req.params;
 		if (!accountId) {
+			// In a real app, you'd probably want a more robust validation/error handling
 			return res.status(400).json({ message: "Account ID is required" });
 		}
 		const account = await getAccountById(accountId);
@@ -48,9 +53,6 @@ export const getAccountByIdController = async (req: Request, res: Response) => {
 		}
 		res.status(200).json(account);
 	} catch (error) {
-		res.status(500).json({
-			message: "Error fetching account",
-			error: error instanceof Error ? error.message : "Unknown error",
-		});
+		next(error);
 	}
 };

@@ -11,7 +11,7 @@ import {
 	getAccountsByUserSchema,
 } from "./account.schema.ts";
 
-const router: Router = Router();
+const router: Router = Router({ mergeParams: true });
 
 router.post("/", validateRequest(createAccountSchema), createAccountController);
 router.get(
