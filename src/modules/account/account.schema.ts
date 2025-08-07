@@ -1,6 +1,54 @@
 import IBAN from "iban";
 import { z } from "zod";
 
+/**
+ * @openapi
+ * components:
+ *   schemas:
+ *     CreateAccountInput:
+ *       type: object
+ *       required:
+ *         - userId
+ *         - IBAN
+ *         - currency
+ *         - initialBalance
+ *       properties:
+ *         userId:
+ *           type: string
+ *         IBAN:
+ *           type: string
+ *         currency:
+ *           type: string
+ *         initialBalance:
+ *           type: number
+ *     CreateAccountResponse:
+ *       type: object
+ *       properties:
+ *         id:
+ *           type: string
+ *         userId:
+ *           type: string
+ *         IBAN:
+ *           type: string
+ *         currency:
+ *           type: string
+ *         balance:
+ *           type: number
+ *     Account:
+ *       type: object
+ *       properties:
+ *         id:
+ *           type: string
+ *         userId:
+ *           type: string
+ *         IBAN:
+ *           type: string
+ *         currency:
+ *           type: string
+ *         balance:
+ *           type: number
+ */
+
 export const createAccountSchema = z.object({
 	body: z.object({
 		userId: z.string(),
