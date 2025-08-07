@@ -9,8 +9,8 @@
 		"build": "bun build ./src/index.ts --outdir ./dist",
 		"dev": "bun --hot src/index.ts",
 		"format": "bun biome format --write .",
-		"lint": "bun biome lint --apply .",
-		"lint:check": "bun biome check --apply .",
+		"lint": "bun biome lint --write .",
+		"lint:check": "bun biome check .",
 		"ci:check": "bun biome ci ."
 	},
 	"keywords": [],
