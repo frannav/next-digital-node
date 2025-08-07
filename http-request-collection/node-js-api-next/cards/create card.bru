@@ -1,0 +1,23 @@
+meta {
+  name: create card
+  type: http
+  seq: 3
+}
+
+post {
+  url: http://localhost:3000/api/cards
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "accountId": "acc_1754564863187",
+    "type": "debit",
+    "pin": "1234"
+  }
+}
+
+settings {
+  encodeUrl: true
+}

@@ -1,0 +1,24 @@
+meta {
+  name: create account
+  type: http
+  seq: 2
+}
+
+post {
+  url: http://localhost:3000/api/accounts
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "userId": "user_1754564903796",
+    "IBAN": "FR1420041010050500013M02606",
+    "currency": "EUR",
+    "initialBalance": 500
+  }
+}
+
+settings {
+  encodeUrl: true
+}

@@ -1,0 +1,23 @@
+meta {
+  name: internal transfer
+  type: http
+  seq: 4
+}
+
+post {
+  url: http://localhost:3000/api/transfers
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "fromAccountId": "acc_1754564863187",
+    "toIban": "FR1420041010050500013M02606",
+    "amount": 100
+  }
+}
+
+settings {
+  encodeUrl: true
+}

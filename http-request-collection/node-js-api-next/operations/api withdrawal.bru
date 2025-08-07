@@ -1,0 +1,22 @@
+meta {
+  name: api withdrawal
+  type: http
+  seq: 3
+}
+
+post {
+  url: http://localhost:3000/api/accounts/acc_1754564863187/movements
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "cardId": "card_1754565358322",
+    "amount": 50
+  }
+}
+
+settings {
+  encodeUrl: true
+}

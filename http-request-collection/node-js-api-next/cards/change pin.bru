@@ -1,0 +1,22 @@
+meta {
+  name: change pin
+  type: http
+  seq: 2
+}
+
+patch {
+  url: http://localhost:3000/api/cards/card_1754565358322/pin
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "oldPin": "1234",
+    "newPin": "5678"
+  }
+}
+
+settings {
+  encodeUrl: true
+}

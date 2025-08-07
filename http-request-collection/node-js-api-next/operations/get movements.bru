@@ -1,0 +1,22 @@
+meta {
+  name: get movements
+  type: http
+  seq: 2
+}
+
+post {
+  url: http://localhost:3000/api/deposits
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "cardId": "card_1754565358322",
+    "amount": 200
+  }
+}
+
+settings {
+  encodeUrl: true
+}
