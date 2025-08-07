@@ -1,15 +1,15 @@
-import express from 'express';
-import cors from 'cors';
+import express from "express";
+import cors from "cors";
 
 const createServer = () => {
-  const app = express();
-  
-  app.use(express.json());
-  app.use(cors());
+	const app = express();
 
-  // TODO: Add routers
-  
-  return app;
+	app.use(express.json());
+	app.use(cors());
+
+	// TODO: Add routers
+
+	return app;
 };
 
 export default createServer;
