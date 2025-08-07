@@ -1,10 +1,11 @@
-import * as store from "../../adapters/local-store/store.ts";
-import type { Account } from "../account/account.types.ts";
-import type { Card } from "../card/card.types.ts";
-import type { Movement } from "../movement/movement.types.ts";
+import * as store from "../../adapters/local-store/store";
+import { HttpError } from "../../utils/HttpError";
+import type { Account } from "../account/account.types";
+import type { Card } from "../card/card.types";
+import type { Movement } from "../movement/movement.types";
 
-const OWN_BANK_ID = "our-bank"; // Example bank ID
-const WITHDRAWAL_FEE = 1.5; // Example fee
+const OWN_BANK_ID = "our-bank";
+const WITHDRAWAL_FEE = 1.5;
 
 export const createWithdrawal = async (withdrawalData: {
 	cardId: string;
@@ -15,37 +16,35 @@ export const createWithdrawal = async (withdrawalData: {
 
 	const card: Card = await store.getById("cards", cardId);
 	if (!card) {
-		return { success: false, message: "Card not found" };
+		throw new HttpError(404, "Card not found");
 	}
 
 	if (!card.activated) {
-		return { success: false, message: "Card is not activated" };
+		throw new HttpError(400, "Card is not activated");
 	}
 
 	const account: Account = await store.getById("accounts", card.accountId);
 	if (!account) {
-		return { success: false, message: "Account not found" };
+		throw new HttpError(404, "Account not found");
 	}
 
 	const fee = atmBankId && atmBankId !== OWN_BANK_ID ? WITHDRAWAL_FEE : 0;
 	const totalAmount = amount + fee;
 
 	if (card.type === "debit" && account.balance < totalAmount) {
-		return { success: false, message: "Insufficient funds" };
+		throw new HttpError(400, "Insufficient funds");
 	}
 
 	if (
 		card.type === "credit" &&
 		account.balance + (card.creditLimit || 0) < totalAmount
 	) {
-		return { success: false, message: "Credit limit exceeded" };
+		throw new HttpError(400, "Credit limit exceeded");
 	}
 
-	// Update account balance
 	const newBalance = account.balance - totalAmount;
 	await store.updateItem("accounts", account.id, { balance: newBalance });
 
-	// Create withdrawal movement
 	const withdrawalMovement: Movement = {
 		id: `mov_${Date.now()}`,
 		accountId: account.id,
@@ -56,7 +55,6 @@ export const createWithdrawal = async (withdrawalData: {
 	};
 	await store.createItem("movements", withdrawalMovement);
 
-	// Create fee movement if applicable
 	if (fee > 0) {
 		const feeMovement: Movement = {
 			id: `mov_${Date.now() + 1}`,
@@ -70,7 +68,6 @@ export const createWithdrawal = async (withdrawalData: {
 	}
 
 	return {
-		success: true,
 		message: "Withdrawal processed successfully",
 		newBalance,
 	};
