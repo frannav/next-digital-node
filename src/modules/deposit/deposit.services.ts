@@ -1,7 +1,8 @@
-import * as store from "../../adapters/local-store/store.ts";
-import type { Account } from "../account/account.types.ts";
-import type { Card } from "../card/card.types.ts";
-import type { Movement } from "../movement/movement.types.ts";
+import * as store from "../../adapters/local-store/store";
+import { HttpError } from "../../utils/HttpError";
+import type { Account } from "../account/account.types";
+import type { Card } from "../card/card.types";
+import type { Movement } from "../movement/movement.types";
 
 export const createDeposit = async (depositData: {
 	cardId: string;
@@ -11,16 +12,12 @@ export const createDeposit = async (depositData: {
 
 	const card: Card = await store.getById("cards", cardId);
 	if (!card) {
-		return { success: false, message: "Card not found" };
+		throw new HttpError(404, "Card not found");
 	}
-
-	// Note: The task mentions deposits should only be allowed at the own bank's ATM.
-	// This logic could be extended by passing an `atmBankId` like in withdrawals.
-	// For now, we assume all deposits are valid.
 
 	const account: Account = await store.getById("accounts", card.accountId);
 	if (!account) {
-		return { success: false, message: "Account not found" };
+		throw new HttpError(404, "Account not found");
 	}
 
 	// Update account balance
@@ -39,7 +36,6 @@ export const createDeposit = async (depositData: {
 	await store.createItem("movements", depositMovement);
 
 	return {
-		success: true,
 		message: "Deposit processed successfully",
 		newBalance,
 	};
