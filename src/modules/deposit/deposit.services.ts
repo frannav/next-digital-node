@@ -1,6 +1,6 @@
 import * as store from "../../adapters/local-store/store.ts";
-import type { Card } from "../card/card.types.ts";
 import type { Account } from "../account/account.types.ts";
+import type { Card } from "../card/card.types.ts";
 import type { Movement } from "../movement/movement.types.ts";
 
 export const createDeposit = async (depositData: {

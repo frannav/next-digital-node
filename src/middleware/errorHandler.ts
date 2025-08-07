@@ -4,10 +4,10 @@ import type { NextFunction, Request, Response } from "express";
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export const errorHandler = (
 	err: Error,
-	req: Request,
+	_req: Request,
 	res: Response,
 	// eslint-disable-next-line @typescript-eslint/no-unused-vars
-	next: NextFunction,
+	_next: NextFunction,
 ) => {
 	console.error(err); // For debugging purposes
 	res.status(500).json({ message: "Something went wrong" });

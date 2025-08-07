@@ -30,7 +30,7 @@ export const getById = async (collection: string, id: string) => {
 	return data[collection]?.find((item) => item.id === id);
 };
 
-export const createItem = async (collection: string, item: any) => {
+export const createItem = async <T>(collection: string, item: T) => {
 	const data = await readData();
 	if (!data[collection]) {
 		data[collection] = [];
@@ -40,10 +40,10 @@ export const createItem = async (collection: string, item: any) => {
 	return item;
 };
 
-export const updateItem = async (
+export const updateItem = async <T>(
 	collection: string,
 	id: string,
-	updatedItem: any,
+	updatedItem: Partial<T>,
 ) => {
 	const data = await readData();
 	const itemIndex = data[collection]?.findIndex((item) => item.id === id);

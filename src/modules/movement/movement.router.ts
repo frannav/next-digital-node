@@ -1,6 +1,6 @@
 import { Router } from "express";
-import { getMovementsController } from "./movement.controller.ts";
 import { validateRequest } from "../../middleware/validateRequest.ts";
+import { getMovementsController } from "./movement.controller.ts";
 import { getMovementsSchema } from "./movement.schema.ts";
 
 const router = Router();

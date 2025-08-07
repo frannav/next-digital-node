@@ -1,6 +1,6 @@
 import { Router } from "express";
-import { createWithdrawalController } from "./withdrawal.controller.ts";
 import { validateRequest } from "../../middleware/validateRequest.ts";
+import { createWithdrawalController } from "./withdrawal.controller.ts";
 import { createWithdrawalSchema } from "./withdrawal.schema.ts";
 
 const router = Router();

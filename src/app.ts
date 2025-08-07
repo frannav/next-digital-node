@@ -1,9 +1,9 @@
-import express from "express";
-import type { Express } from "express";
 import cors from "cors";
+import type { Express } from "express";
+import express from "express";
+import { errorHandler } from "./middleware/errorHandler";
 import { requestLogger } from "./middleware/pino";
 import routes from "./routes";
-import { errorHandler } from "./middleware/errorHandler";
 
 const app: Express = express();
 

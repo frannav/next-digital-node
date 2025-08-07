@@ -9,11 +9,9 @@ export const createDepositController = async (req: Request, res: Response) => {
 		}
 		res.status(200).json(result);
 	} catch (error) {
-		res
-			.status(500)
-			.json({
-				message: "Error processing deposit",
-				error: error instanceof Error ? error.message : "Unknown error",
-			});
+		res.status(500).json({
+			message: "Error processing deposit",
+			error: error instanceof Error ? error.message : "Unknown error",
+		});
 	}
 };

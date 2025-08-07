@@ -1,5 +1,5 @@
-import { z } from "zod";
 import IBAN from "iban";
+import { z } from "zod";
 
 export const createAccountSchema = z.object({
 	body: z.object({

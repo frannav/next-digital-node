@@ -1,6 +1,6 @@
+import bcrypt from "bcrypt";
 import * as store from "../../adapters/local-store/store.ts";
 import type { Card } from "./card.types.ts";
-import bcrypt from "bcrypt";
 
 const saltRounds = 10;
 
@@ -32,7 +32,7 @@ export const getCardById = async (
 ): Promise<Omit<Card, "pinHash"> | undefined> => {
 	const card = await store.getById("cards", cardId);
 	if (card) {
-		const { pinHash, ...cardWithoutPin } = card;
+		const { pinHash: _, ...cardWithoutPin } = card;
 		return cardWithoutPin;
 	}
 	return undefined;

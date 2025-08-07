@@ -1,6 +1,6 @@
+import bcrypt from "bcrypt";
 import * as store from "../../adapters/local-store/store";
 import type { User } from "./user.types";
-import bcrypt from "bcrypt";
 
 const saltRounds = 10;
 

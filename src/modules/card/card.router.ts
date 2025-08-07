@@ -1,16 +1,16 @@
 import { Router } from "express";
-import {
-	createCardController,
-	getCardByIdController,
-	activateCardController,
-	changePinController,
-} from "./card.controller.ts";
 import { validateRequest } from "../../middleware/validateRequest.ts";
 import {
-	createCardSchema,
-	getCardByIdSchema,
+	activateCardController,
+	changePinController,
+	createCardController,
+	getCardByIdController,
+} from "./card.controller.ts";
+import {
 	activateCardSchema,
 	changePinSchema,
+	createCardSchema,
+	getCardByIdSchema,
 } from "./card.schema.ts";
 
 const router = Router();

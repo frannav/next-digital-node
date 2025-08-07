@@ -10,11 +10,9 @@ export const getMovementsController = async (req: Request, res: Response) => {
 		const movements = await getMovementsByAccountId(accountId);
 		res.status(200).json(movements);
 	} catch (error) {
-		res
-			.status(500)
-			.json({
-				message: "Error fetching movements",
-				error: error instanceof Error ? error.message : "Unknown error",
-			});
+		res.status(500).json({
+			message: "Error fetching movements",
+			error: error instanceof Error ? error.message : "Unknown error",
+		});
 	}
 };
