@@ -49,9 +49,39 @@ To build and run the server in production mode:
     bun run start
     ```
 
+## Running with Docker
+
+You can also run the application using Docker and Docker Compose.
+
+1.  **Build and run with Docker Compose (recommended):**
+    ```bash
+    docker-compose up -d
+    ```
+    This command builds the image and starts the container in the background. The API will be available at `http://localhost:3000`. The `db.json` file is mounted as a volume to persist data across container restarts.
+
+2.  **Manual build and run with Docker:**
+    -   **Build the image:**
+        ```bash
+        docker build -t node-js-api .
+        ```
+    -   **Run the container:**
+        ```bash
+        docker run -p 3000:3000 -v ./db.json:/app/db.json --env-file ./.env node-js-api
+        ```
+
 ## API Endpoints
 
 All endpoints are prefixed with `/api`.
+
+### Testing with Bruno
+
+This project includes a [Bruno](https://www.usebruno.com/) collection located in the `http-request-collection/` directory. Bruno is an open-source API client, similar to Postman, that allows you to test the API endpoints easily.
+
+To use it:
+1.  Download and install Bruno from their official website.
+2.  Open Bruno and click on "Open Collection".
+3.  Navigate to the `http-request-collection/` folder in this project and select it.
+4.  The collection with all the API requests will be loaded, ready for you to use.
 
 ### Users & Accounts
 - `POST /api/users`: Create a new user.
@@ -185,10 +215,5 @@ A client in the financial sector has asked us to develop the API that will be us
     * Run tests
     * Build the application
     * Deploy automatically
-
-* **Containerization**
-
-  * Provide a **Dockerfile** and use **Docker** for containerized deployments.
-
 
 
