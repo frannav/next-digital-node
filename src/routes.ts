@@ -13,6 +13,7 @@ router.use('/api/users', userRouter);
 router.use('/api/accounts', accountRouter);
 router.use('/api/cards', cardRouter);
 // Nested route for movements under accounts
+// TODO: error with movements route fix when finish mvp
 // accountRouter.use('/:accountId/movements', movementRouter);
 router.use('/api/withdrawals', withdrawalRouter);
 router.use('/api/deposits', depositRouter);
