@@ -1,4 +1,4 @@
-import { Request, Response } from 'express';
+import type { Request, Response } from 'express';
 import { createWithdrawal } from './withdrawal.services.ts';
 
 export const createWithdrawalController = async (req: Request, res: Response) => {
@@ -9,7 +9,7 @@ export const createWithdrawalController = async (req: Request, res: Response) =>
     }
     res.status(200).json(result);
   } catch (error) {
-    res.status(500).json({ message: 'Error processing withdrawal', error: error.message });
+    res.status(500).json({ message: 'Error processing withdrawal', error: error instanceof Error ? error.message : 'Unknown error' });
   }
 };
 
